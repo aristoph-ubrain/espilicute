@@ -85,7 +85,7 @@ async function Resultados({ searchParams }: Pick<PageProps<"/produtos">, "search
 
       <div className="flex flex-col gap-5 md:flex-row md:gap-10">
         <aside className="flex flex-col gap-4 md:w-60 md:flex-none">
-          <form action="/produtos" className="flex flex-col gap-4" id="busca">
+          <form action="/produtos" className="flex flex-col gap-4">
             {f.tamanho && <input type="hidden" name="tamanho" value={f.tamanho} />}
             {f.cor && <input type="hidden" name="cor" value={f.cor} />}
             {f.estilo && <input type="hidden" name="estilo" value={f.estilo} />}
@@ -95,6 +95,8 @@ async function Resultados({ searchParams }: Pick<PageProps<"/produtos">, "search
                 type="search"
                 name="q"
                 defaultValue={f.q}
+                // A lupa do cabeçalho abre /produtos?buscar=1 com o cursor já no campo
+                autoFocus={texto(sp.buscar) === "1"}
                 placeholder="Buscar shorts"
                 aria-label="Buscar shorts"
                 className="min-w-0 flex-1 bg-transparent text-sm text-tinta outline-none"

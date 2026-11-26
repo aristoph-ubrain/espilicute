@@ -35,7 +35,7 @@ export function Cabecalho() {
         </Link>
         <div className="flex items-center justify-end md:w-64">
           <Link
-            href="/produtos#busca"
+            href="/produtos?buscar=1"
             aria-label="Buscar"
             className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-blush"
           >
