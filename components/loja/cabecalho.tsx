@@ -4,6 +4,7 @@ import { BotaoSacola } from "./botao-sacola";
 import { MenuMovel } from "./menu-movel";
 
 export const LINKS_MENU = [
+  { href: "/", rotulo: "Página inicial" },
   { href: "/produtos", rotulo: "Shorts" },
   { href: "/produtos?ordem=novidades", rotulo: "Novidades" },
   { href: "/info/sobre", rotulo: "Sobre a Espilicute" },
