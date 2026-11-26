@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { IconeFechar, IconeMenu } from "@/components/icones";
 
 export function MenuMovel({ links }: { links: { href: string; rotulo: string }[] }) {
@@ -31,7 +32,9 @@ export function MenuMovel({ links }: { links: { href: string; rotulo: string }[]
       >
         <IconeMenu />
       </button>
-      {aberto && (
+      {/* Portal no <body>: o cabeçalho usa backdrop-blur, que prenderia o "fixed" dentro dele. */}
+      {aberto &&
+        createPortal(
         <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Menu">
           <button
             type="button"
@@ -63,8 +66,9 @@ export function MenuMovel({ links }: { links: { href: string; rotulo: string }[]
               </Link>
             ))}
           </nav>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
     </div>
   );
 }
