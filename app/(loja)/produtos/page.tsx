@@ -138,6 +138,7 @@ async function Resultados({ searchParams }: Pick<PageProps<"/produtos">, "search
                 <Link
                   key={nome}
                   href={urlCom(f, { cor: f.cor === nome ? undefined : nome })}
+                  scroll={false}
                   aria-label={nome}
                   aria-current={f.cor === nome ? "true" : undefined}
                   title={nome}
@@ -160,7 +161,7 @@ async function Resultados({ searchParams }: Pick<PageProps<"/produtos">, "search
           )}
 
           {temFiltro && (
-            <Link href={urlCom({}, { ordem: f.ordem })} className="text-[13px] font-semibold text-vinho underline">
+            <Link href={urlCom({}, { ordem: f.ordem })} scroll={false} className="text-[13px] font-semibold text-vinho underline">
               Limpar filtros
             </Link>
           )}
@@ -205,6 +206,8 @@ function Pilula({ href, ativa, children }: { href: string; ativa: boolean; child
   return (
     <Link
       href={href}
+      // Filtrar não deve jogar a cliente de volta ao topo
+      scroll={false}
       aria-current={ativa ? "true" : undefined}
       className={`flex h-11 min-w-12 items-center justify-center rounded-full border-[1.5px] px-3 text-[13px] font-semibold ${
         ativa ? "border-vinho bg-vinho text-white" : "border-borda bg-white text-tinta hover:border-vinho"
