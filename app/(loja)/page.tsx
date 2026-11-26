@@ -12,9 +12,15 @@ export default async function Inicio() {
     ...produtos.filter((p) => !p.etiquetas.maisVendido && !p.etiquetas.novidade),
   ].slice(0, 8);
 
-  const estilos = Array.from(
-    new Map(produtos.filter((p) => p.estilo).map((p) => [p.estilo, p.cores[0]?.hex ?? "#c9897b"])).entries(),
-  ).slice(0, 6);
+  // Um círculo por estilo: foto do produto mais recente com foto, senão o desenho na cor do estilo.
+  const porEstilo = new Map<string, { hex: string; foto: string | null }>();
+  for (const p of produtos) {
+    if (!p.estilo) continue;
+    const atual = porEstilo.get(p.estilo);
+    if (!atual) porEstilo.set(p.estilo, { hex: p.cores[0]?.hex ?? "#c9897b", foto: p.imagens[0] ?? null });
+    else if (!atual.foto && p.imagens[0]) atual.foto = p.imagens[0];
+  }
+  const estilos = Array.from(porEstilo.entries()).slice(0, 6);
 
   return (
     <>
@@ -62,17 +68,27 @@ export default async function Inicio() {
         <Revelar como="section" className="mx-auto w-full max-w-6xl pt-8">
           <h2 className="mb-4 px-5 text-lg font-bold md:px-6">Compre por estilo</h2>
           <div className="sem-barra flex gap-3 overflow-x-auto px-5 pb-2 md:px-6">
-            {estilos.map(([estilo, hex]) => (
+            {estilos.map(([estilo, { hex, foto }]) => (
               <Link
                 key={estilo}
                 href={`/produtos?estilo=${encodeURIComponent(estilo)}`}
                 className="group flex w-20 flex-none flex-col items-center gap-2"
               >
                 <span
-                  className="flex h-[72px] w-[72px] items-center justify-center rounded-full ring-vinho/0 ring-offset-2 transition duration-300 group-hover:ring-2 group-hover:ring-vinho group-active:scale-95"
+                  className="relative flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded-full ring-vinho/0 ring-offset-2 transition duration-300 group-hover:ring-2 group-hover:ring-vinho group-active:scale-95"
                   style={{ background: fundoClaro(hex) }}
                 >
-                  <ArteShort cor={hex} largura={40} className="transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" />
+                  {foto ? (
+                    <Image
+                      src={foto}
+                      alt=""
+                      fill
+                      sizes="72px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <ArteShort cor={hex} largura={40} className="transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" />
+                  )}
                 </span>
                 <span className="text-center text-xs font-semibold">{estilo}</span>
               </Link>
