@@ -2,6 +2,7 @@ import "server-only";
 import { ObjectId, type WithId, type Document } from "mongodb";
 import { cacheLife, cacheTag } from "next/cache";
 import { bancoConfigurado, getDb } from "./db";
+import { exigirAdmin } from "./sessao";
 import {
   CONFIG_PADRAO,
   TAMANHOS,
@@ -98,14 +99,18 @@ export async function getConfiguracoes(): Promise<Configuracoes> {
 }
 
 // ---------- leituras do painel (sempre atuais, sem cache) ----------
+// Cada leitura confere a sessão: isso protege os dados e marca a renderização como dinâmica
+// (necessário com Cache Components, já que o driver do MongoDB usa new Date() internamente).
 
 export async function adminListarProdutos(): Promise<Produto[]> {
+  await exigirAdmin();
   const db = await getDb();
   const docs = await db.collection("produtos").find({}).sort({ criadoEm: -1 }).toArray();
   return docs.map(paraProduto);
 }
 
 export async function adminGetProduto(id: string): Promise<Produto | null> {
+  await exigirAdmin();
   if (!ObjectId.isValid(id)) return null;
   const db = await getDb();
   const doc = await db.collection("produtos").findOne({ _id: new ObjectId(id) });
@@ -113,6 +118,7 @@ export async function adminGetProduto(id: string): Promise<Produto | null> {
 }
 
 export async function adminListarPedidos(status?: StatusPedido): Promise<Pedido[]> {
+  await exigirAdmin();
   const db = await getDb();
   const filtro = status ? { status } : {};
   const docs = await db.collection("pedidos").find(filtro).sort({ criadoEm: -1 }).limit(200).toArray();

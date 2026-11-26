@@ -1,10 +1,10 @@
-import { connection } from "next/server";
 import { FormConfiguracoes } from "@/components/admin/form-configuracoes";
 import { getDb } from "@/lib/db";
+import { exigirAdmin } from "@/lib/sessao";
 import { CONFIG_PADRAO, type Configuracoes } from "@/lib/types";
 
 async function lerConfiguracoesAtuais(): Promise<Configuracoes> {
-  await connection();
+  await exigirAdmin();
   const db = await getDb();
   const doc = await db.collection<{ _id: string } & Partial<Configuracoes>>("configuracoes").findOne({ _id: "loja" });
   const atual = { ...CONFIG_PADRAO };
