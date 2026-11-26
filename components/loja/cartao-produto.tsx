@@ -61,12 +61,14 @@ export function FotoProduto({
   sizes,
   prioridade = false,
   largura = 96,
+  className = "",
 }: {
   produto: Produto;
   indice?: number;
   sizes: string;
   prioridade?: boolean;
   largura?: number;
+  className?: string;
 }) {
   const cor = produto.cores[0]?.hex ?? "#c9897b";
   const src = produto.imagens[indice];
@@ -78,13 +80,13 @@ export function FotoProduto({
         fill
         sizes={sizes}
         priority={prioridade}
-        className="object-cover"
+        className={`object-cover ${className}`}
       />
     );
   }
   return (
     <div className="flex h-full w-full items-center justify-center" style={{ background: fundoClaro(cor) }}>
-      <ArteShort cor={cor} largura={largura} />
+      <ArteShort cor={cor} largura={largura} className={className} />
     </div>
   );
 }
@@ -93,11 +95,23 @@ export function CartaoProduto({ produto }: { produto: Produto }) {
   const tamanhosDisp = produto.tamanhos.filter((t) => t.estoque > 0).map((t) => t.tamanho);
   return (
     <Link href={`/produtos/${produto.slug}`} className="group flex flex-col gap-1.5">
-      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-blush">
-        <FotoProduto produto={produto} sizes="(min-width: 1024px) 25vw, 50vw" />
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-blush transition-shadow duration-300 group-hover:shadow-[0_10px_30px_-12px_rgba(122,35,70,0.35)]">
+        <FotoProduto
+          produto={produto}
+          sizes="(min-width: 1024px) 25vw, 50vw"
+          className="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        />
+        {/* Com duas fotos, a segunda aparece ao passar o mouse (desktop) */}
+        {produto.imagens[1] && (
+          <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <FotoProduto produto={produto} indice={1} sizes="(min-width: 1024px) 25vw, 50vw" />
+          </div>
+        )}
         <EtiquetasProduto produto={produto} />
       </div>
-      <span className="text-[13px] font-medium leading-snug group-hover:underline">{produto.nome}</span>
+      <span className="text-[13px] font-medium leading-snug decoration-rose underline-offset-4 group-hover:underline">
+        {produto.nome}
+      </span>
       {tamanhosDisp.length > 0 && <span className="text-xs text-apagado">Tam. {tamanhosDisp.join(" · ")}</span>}
       <Preco produto={produto} />
     </Link>

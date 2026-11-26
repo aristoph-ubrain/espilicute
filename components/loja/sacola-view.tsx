@@ -50,7 +50,7 @@ export function SacolaView() {
 
   if (confirmado) {
     return (
-      <div className="mx-auto flex max-w-md flex-col items-center gap-4 rounded-2xl bg-blush p-8 text-center">
+      <div className="surgir mx-auto flex max-w-md flex-col items-center gap-4 rounded-2xl bg-blush p-8 text-center">
         <h1 className="text-xl font-bold">Pedido #{confirmado.numero} registrado!</h1>
         <p className="text-sm leading-relaxed text-suave">
           Estamos abrindo o WhatsApp com a mensagem pronta. É só enviar para combinarmos pagamento e entrega.
@@ -89,7 +89,7 @@ export function SacolaView() {
         <div className="flex flex-col gap-6 md:grid md:grid-cols-[1fr_340px] md:items-start md:gap-8">
           <ul className="flex flex-col">
             {itens.map((i) => (
-              <li key={`${i.produtoId}-${i.cor}-${i.tamanho}`} className="flex gap-3.5 border-b border-linha py-4">
+              <li key={`${i.produtoId}-${i.cor}-${i.tamanho}`} className="surgir flex gap-3.5 border-b border-linha py-4">
                 <Link
                   href={`/produtos/${i.slug}`}
                   className="relative flex h-[116px] w-[92px] flex-none items-center justify-center overflow-hidden rounded-xl bg-blush"
@@ -211,7 +211,7 @@ export function SacolaView() {
             <button
               type="submit"
               disabled={enviando}
-              className="flex h-[54px] items-center justify-center gap-2.5 rounded-full bg-vinho text-sm font-bold tracking-wide text-white hover:bg-vinho-escuro disabled:opacity-60"
+              className="pressionar flex h-[54px] items-center justify-center gap-2.5 rounded-full bg-vinho text-sm font-bold tracking-wide text-white hover:bg-vinho-escuro disabled:opacity-60"
             >
               <IconeConversa tamanho={20} />
               {enviando ? "REGISTRANDO PEDIDO…" : "FINALIZAR PELO WHATSAPP"}

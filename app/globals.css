@@ -32,7 +32,120 @@ body {
   outline-offset: 2px;
 }
 
+/* ---------- efeitos ---------- */
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Botões principais: leve "afundar" ao toque */
+.pressionar {
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
+}
+.pressionar:active {
+  transform: scale(0.97);
+}
+
+/* Entrada do banner (pura CSS, roda no primeiro paint) */
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.surgir {
+  animation: surgir 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.surgir-1 {
+  animation-delay: 0.08s;
+}
+.surgir-2 {
+  animation-delay: 0.18s;
+}
+.surgir-3 {
+  animation-delay: 0.28s;
+}
+
+@keyframes zoom-lento {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.zoom-lento {
+  animation: zoom-lento 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Revelar ao rolar: só esconde o que o JS marcou como fora da tela (nunca some sem JS) */
+[data-revelar] {
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+[data-revelar="oculto"] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Contador da sacola "pula" quando um item entra */
+@keyframes pulo {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.45);
+  }
+  65% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pulo {
+  animation: pulo 0.5s ease;
+}
+
+/* Menu lateral */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes deslizar {
+  from {
+    transform: translateX(-100%);
+  }
+}
+.aparecer {
+  animation: aparecer 0.25s ease both;
+}
+.deslizar {
+  animation: deslizar 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.sem-barra {
+  scrollbar-width: none;
+}
+.sem-barra::-webkit-scrollbar {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  [data-revelar="oculto"] {
+    opacity: 1;
+    transform: none;
+  }
+
   *,
   *::before,
   *::after {

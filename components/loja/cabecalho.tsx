@@ -6,7 +6,7 @@ import { MenuMovel } from "./menu-movel";
 export const LINKS_MENU = [
   { href: "/", rotulo: "Página inicial" },
   { href: "/produtos", rotulo: "Shorts" },
-  { href: "/produtos?ordem=novidades", rotulo: "Novidades" },
+  { href: "/produtos?novidades=1", rotulo: "Novidades" },
   { href: "/info/sobre", rotulo: "Sobre a Espilicute" },
   { href: "/info/trocas", rotulo: "Trocas e devoluções" },
   { href: "/info/contato", rotulo: "Contato" },
@@ -25,7 +25,7 @@ export function Cabecalho() {
             <Link href="/produtos" className="hover:text-vinho">
               Shorts
             </Link>
-            <Link href="/produtos?ordem=novidades" className="hover:text-vinho">
+            <Link href="/produtos?novidades=1" className="hover:text-vinho">
               Novidades
             </Link>
           </nav>

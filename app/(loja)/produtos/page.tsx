@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { Revelar } from "@/components/efeitos/revelar";
 import { IconeBusca } from "@/components/icones";
 import { CartaoProduto, estoqueTotal } from "@/components/loja/cartao-produto";
 import { getProdutosAtivos } from "@/lib/data";
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   description: "Todos os shorts da Espilicute. Filtre por tamanho, cor e estilo.",
 };
 
-type Filtros = { tamanho?: string; cor?: string; estilo?: string; ordem?: string; q?: string };
+type Filtros = { tamanho?: string; cor?: string; estilo?: string; ordem?: string; q?: string; novidades?: string };
 
 const ORDENS = [
   { valor: "novidades", rotulo: "Novidades" },
@@ -27,8 +28,18 @@ function normal(s: string) {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
+/**
+ * "Novidades" mostra os produtos marcados com a etiqueta Novidade no painel.
+ * Se nenhum estiver marcado, mostra os 8 mais recentes (a lista já vem do mais novo para o mais antigo).
+ */
+function baseNovidades(produtos: Produto[]) {
+  const marcados = produtos.filter((p) => p.etiquetas.novidade);
+  return marcados.length > 0 ? marcados : produtos.slice(0, 8);
+}
+
 function filtrar(produtos: Produto[], f: Filtros) {
-  let lista = produtos.filter((p) => {
+  const base = f.novidades ? baseNovidades(produtos) : produtos;
+  let lista = base.filter((p) => {
     if (f.tamanho && !p.tamanhos.some((t) => t.tamanho === f.tamanho && t.estoque > 0)) return false;
     if (f.cor && !p.cores.some((c) => c.nome === f.cor)) return false;
     if (f.estilo && p.estilo !== f.estilo) return false;
@@ -67,17 +78,18 @@ async function Resultados({ searchParams }: Pick<PageProps<"/produtos">, "search
     estilo: texto(sp.estilo),
     ordem: texto(sp.ordem),
     q: texto(sp.q),
+    novidades: texto(sp.novidades) === "1" ? "1" : undefined,
   };
   const todos = await getProdutosAtivos();
   const lista = filtrar(todos, f);
   const cores = Array.from(new Map(todos.flatMap((p) => p.cores).map((c) => [c.nome, c.hex])).entries());
   const estilos = Array.from(new Set(todos.map((p) => p.estilo).filter(Boolean)));
-  const temFiltro = Boolean(f.tamanho || f.cor || f.estilo || f.q);
+  const temFiltro = Boolean(f.tamanho || f.cor || f.estilo || f.q || f.novidades);
 
   return (
     <>
       <div className="mb-5">
-        <h1 className="text-2xl font-bold">{f.estilo ? `Shorts ${f.estilo}` : "Shorts"}</h1>
+        <h1 className="text-2xl font-bold">{f.novidades ? "Novidades" : f.estilo ? `Shorts ${f.estilo}` : "Shorts"}</h1>
         <p className="mt-1 text-[13px] text-suave">
           {lista.length === 1 ? "1 produto" : `${lista.length} produtos`}
         </p>
@@ -89,6 +101,7 @@ async function Resultados({ searchParams }: Pick<PageProps<"/produtos">, "search
             {f.tamanho && <input type="hidden" name="tamanho" value={f.tamanho} />}
             {f.cor && <input type="hidden" name="cor" value={f.cor} />}
             {f.estilo && <input type="hidden" name="estilo" value={f.estilo} />}
+            {f.novidades && <input type="hidden" name="novidades" value="1" />}
             <label className="flex h-[46px] items-center gap-2.5 rounded-xl border border-borda px-3.5 text-apagado focus-within:border-vinho">
               <IconeBusca tamanho={18} />
               <input
@@ -170,8 +183,10 @@ async function Resultados({ searchParams }: Pick<PageProps<"/produtos">, "search
         <section className="flex-1">
           {lista.length > 0 ? (
             <div className="grid grid-cols-2 gap-x-3 gap-y-6 lg:grid-cols-3 lg:gap-x-5">
-              {lista.map((p) => (
-                <CartaoProduto key={p.id} produto={p} />
+              {lista.map((p, i) => (
+                <Revelar key={p.id} atraso={(i % 3) * 70}>
+                  <CartaoProduto produto={p} />
+                </Revelar>
               ))}
             </div>
           ) : (

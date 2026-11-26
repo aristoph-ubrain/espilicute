@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Revelar } from "@/components/efeitos/revelar";
 import { CartaoProduto, Preco, estoqueTotal } from "@/components/loja/cartao-produto";
 import { CompraProduto } from "@/components/loja/compra-produto";
 import { Galeria } from "@/components/loja/galeria";
@@ -119,8 +120,10 @@ async function Detalhes({ slug }: { slug: string }) {
         <section className="px-5 pt-10 md:px-0">
           <h2 className="mb-4 text-lg font-bold">Combina com você</h2>
           <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-4 md:gap-x-5">
-            {relacionados.map((p) => (
-              <CartaoProduto key={p.id} produto={p} />
+            {relacionados.map((p, i) => (
+              <Revelar key={p.id} atraso={(i % 4) * 80}>
+                <CartaoProduto produto={p} />
+              </Revelar>
             ))}
           </div>
         </section>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Revelar } from "@/components/efeitos/revelar";
 import { ArteShort, IconeConversa, IconeEntrega, IconeTroca } from "@/components/icones";
 import { CartaoProduto, fundoClaro } from "@/components/loja/cartao-produto";
 import { getConfiguracoes, getProdutosAtivos } from "@/lib/data";
@@ -25,30 +26,30 @@ export default async function Inicio() {
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="zoom-lento object-cover"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center pb-40 md:justify-end md:pb-0 md:pr-[12%]">
-            <ArteShort cor="#7a2346" largura={220} className="opacity-90" />
+            <ArteShort cor="#7a2346" largura={220} className="surgir opacity-90" />
           </div>
         )}
         <div className="relative bg-linear-to-b from-tinta/0 via-tinta/60 to-tinta/80 px-6 pb-8 pt-24 md:bg-linear-to-r md:from-tinta/75 md:via-tinta/40 md:to-tinta/0 md:py-24">
           <div className="mx-auto flex max-w-6xl flex-col gap-4">
-            <h1 className="max-w-md text-[30px] font-bold leading-tight text-white md:text-5xl">
+            <h1 className="surgir surgir-1 max-w-md text-[30px] font-bold leading-tight text-white md:text-5xl">
               Seu estilo, suas regras. Seu momento,{" "}
               <span className="font-script text-[42px] font-normal md:text-[64px]">Espilicute.</span>
             </h1>
-            <p className="text-sm text-blush md:text-base">Shorts femininos que combinam com você.</p>
-            <div className="flex max-w-md gap-3">
+            <p className="surgir surgir-2 text-sm text-blush md:text-base">Shorts femininos que combinam com você.</p>
+            <div className="surgir surgir-3 flex max-w-md gap-3">
               <Link
                 href="/produtos"
-                className="flex h-12 flex-1 items-center justify-center rounded-full bg-white text-[13px] font-bold tracking-wider text-vinho hover:bg-blush"
+                className="pressionar flex h-12 flex-1 items-center justify-center rounded-full bg-white text-[13px] font-bold tracking-wider text-vinho hover:bg-blush"
               >
                 COMPRE AGORA
               </Link>
               <Link
-                href="/produtos?ordem=novidades"
-                className="flex h-12 flex-1 items-center justify-center rounded-full border-[1.5px] border-white text-[13px] font-bold tracking-wider text-white hover:bg-white/10"
+                href="/produtos?novidades=1"
+                className="pressionar flex h-12 flex-1 items-center justify-center rounded-full border-[1.5px] border-white text-[13px] font-bold tracking-wider text-white hover:bg-white/10"
               >
                 VER NOVIDADES
               </Link>
@@ -58,45 +59,45 @@ export default async function Inicio() {
       </section>
 
       {estilos.length > 0 && (
-        <section className="mx-auto w-full max-w-6xl pt-8">
+        <Revelar como="section" className="mx-auto w-full max-w-6xl pt-8">
           <h2 className="mb-4 px-5 text-lg font-bold md:px-6">Compre por estilo</h2>
-          <div className="flex gap-3 overflow-x-auto px-5 pb-2 md:px-6">
+          <div className="sem-barra flex gap-3 overflow-x-auto px-5 pb-2 md:px-6">
             {estilos.map(([estilo, hex]) => (
               <Link
                 key={estilo}
                 href={`/produtos?estilo=${encodeURIComponent(estilo)}`}
-                className="flex w-20 flex-none flex-col items-center gap-2"
+                className="group flex w-20 flex-none flex-col items-center gap-2"
               >
                 <span
-                  className="flex h-[72px] w-[72px] items-center justify-center rounded-full"
+                  className="flex h-[72px] w-[72px] items-center justify-center rounded-full ring-vinho/0 ring-offset-2 transition duration-300 group-hover:ring-2 group-hover:ring-vinho group-active:scale-95"
                   style={{ background: fundoClaro(hex) }}
                 >
-                  <ArteShort cor={hex} largura={40} />
+                  <ArteShort cor={hex} largura={40} className="transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" />
                 </span>
                 <span className="text-center text-xs font-semibold">{estilo}</span>
               </Link>
             ))}
           </div>
-        </section>
+        </Revelar>
       )}
 
       <section className="mx-auto w-full max-w-6xl px-5 pt-8 md:px-6">
-        <div className="mb-4 flex items-baseline justify-between">
+        <Revelar className="mb-4 flex items-baseline justify-between">
           <h2 className="text-lg font-bold">Destaques</h2>
-          <Link href="/produtos" className="text-[13px] font-semibold text-vinho hover:underline">
+          <Link href="/produtos" className="text-[13px] font-semibold text-vinho underline-offset-4 hover:underline">
             Ver todos
           </Link>
-        </div>
+        </Revelar>
         {destaques.length > 0 ? (
           <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-4 md:gap-x-5">
-            {destaques.map((p) => (
-              <CartaoProduto key={p.id} produto={p} />
+            {destaques.map((p, i) => (
+              <Revelar key={p.id} atraso={(i % 4) * 80}>
+                <CartaoProduto produto={p} />
+              </Revelar>
             ))}
           </div>
         ) : (
-          <p className="rounded-2xl bg-blush p-6 text-center text-sm text-suave">
-            Em breve, novidades por aqui.
-          </p>
+          <p className="rounded-2xl bg-blush p-6 text-center text-sm text-suave">Em breve, novidades por aqui.</p>
         )}
       </section>
 
@@ -110,9 +111,15 @@ export default async function Inicio() {
           },
           { Icone: IconeEntrega, titulo: "Entrega", texto: "Veja regiões, prazos e valores.", href: "/info/entrega" },
           { Icone: IconeTroca, titulo: "Trocas", texto: "Conheça nossa política de trocas.", href: "/info/trocas" },
-        ].map(({ Icone, titulo, texto, href }) => (
-          <div key={titulo} className="flex items-start gap-3 rounded-2xl bg-blush p-5">
-            <Icone className="mt-0.5 flex-none text-vinho" />
+        ].map(({ Icone, titulo, texto, href }, i) => (
+          <Revelar
+            key={titulo}
+            atraso={i * 90}
+            className="flex items-start gap-3 rounded-2xl bg-blush p-5 transition-transform duration-300 hover:-translate-y-0.5"
+          >
+            <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white text-vinho">
+              <Icone tamanho={20} />
+            </span>
             <div>
               <p className="text-sm font-bold">{titulo}</p>
               <p className="text-[13px] leading-relaxed text-suave">
@@ -124,7 +131,7 @@ export default async function Inicio() {
                 )}
               </p>
             </div>
-          </div>
+          </Revelar>
         ))}
       </section>
     </>

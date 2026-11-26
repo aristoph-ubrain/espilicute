@@ -61,7 +61,7 @@ export function CompraProduto({ produto, guiaMedidas }: { produto: Produto; guia
                   setCor(c.nome);
                   setAdicionado(false);
                 }}
-                className={`flex h-11 w-11 items-center justify-center rounded-full border-2 ${cor === c.nome ? "border-vinho" : "border-transparent"}`}
+                className={`flex h-11 w-11 items-center justify-center rounded-full border-2 transition-colors active:scale-95 ${cor === c.nome ? "border-vinho" : "border-transparent"}`}
               >
                 <span className="block h-[30px] w-[30px] rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]" style={{ background: c.hex }} />
               </button>
@@ -100,7 +100,7 @@ export function CompraProduto({ produto, guiaMedidas }: { produto: Produto; guia
                 setAviso(null);
                 setAdicionado(false);
               }}
-              className={`h-11 min-w-[52px] rounded-full border-[1.5px] px-3 text-[13px] font-semibold ${
+              className={`h-11 min-w-[52px] rounded-full border-[1.5px] px-3 text-[13px] font-semibold transition-colors active:scale-95 ${
                 e === 0
                   ? "cursor-not-allowed border-dashed border-borda text-[#a0959a] line-through"
                   : tamanho === t
@@ -147,7 +147,7 @@ export function CompraProduto({ produto, guiaMedidas }: { produto: Produto; guia
         <button
           type="button"
           onClick={adicionar}
-          className="flex-1 rounded-full bg-vinho text-[13px] font-bold tracking-wider text-white hover:bg-vinho-escuro"
+          className="pressionar flex-1 rounded-full bg-vinho text-[13px] font-bold tracking-wider text-white hover:bg-vinho-escuro"
         >
           ADICIONAR À SACOLA
         </button>
@@ -155,12 +155,12 @@ export function CompraProduto({ produto, guiaMedidas }: { produto: Produto; guia
 
       <div aria-live="polite">
         {aviso && (
-          <p role="alert" className="-mt-2 text-[13px] font-semibold text-alerta">
+          <p role="alert" className="surgir -mt-2 text-[13px] font-semibold text-alerta">
             {aviso}
           </p>
         )}
         {adicionado && (
-          <div className="-mt-1 flex items-center justify-between gap-3 rounded-xl bg-blush px-4 py-3 text-[13px]">
+          <div className="surgir -mt-1 flex items-center justify-between gap-3 rounded-xl bg-blush px-4 py-3 text-[13px]">
             <span className="font-semibold">Adicionado à sacola!</span>
             <Link href="/sacola" className="font-bold text-vinho underline">
               Ver sacola

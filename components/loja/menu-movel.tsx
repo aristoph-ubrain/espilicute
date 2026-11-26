@@ -39,10 +39,10 @@ export function MenuMovel({ links }: { links: { href: string; rotulo: string }[]
           <button
             type="button"
             aria-label="Fechar menu"
-            className="absolute inset-0 bg-tinta/40"
+            className="aparecer absolute inset-0 bg-tinta/40"
             onClick={() => setAberto(false)}
           />
-          <nav className="absolute inset-y-0 left-0 flex w-[82%] max-w-xs flex-col bg-white p-4 shadow-xl">
+          <nav className="deslizar absolute inset-y-0 left-0 flex w-[82%] max-w-xs flex-col bg-white p-4 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
               <span className="font-script text-[34px] leading-none text-vinho">Espilicute</span>
               <button

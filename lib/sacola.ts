@@ -6,6 +6,8 @@ import type { ItemSacola } from "./types";
 /** Sacola guardada no navegador (localStorage), compartilhada entre abas. */
 const CHAVE = "espilicute:sacola:v1";
 const VAZIA: ItemSacola[] = [];
+/** Disparado ao adicionar um item (usado para animar o ícone da sacola). */
+export const EVENTO_ADICIONADO = "espilicute:sacola-adicionado";
 
 let itens: ItemSacola[] = VAZIA;
 let carregada = false;
@@ -74,6 +76,7 @@ export function adicionarItem(novo: ItemSacola) {
       ? atual.map((i) => (mesmaLinha(i, novo) ? { ...i, qtd: Math.min(20, i.qtd + novo.qtd) } : i))
       : [...atual, novo],
   );
+  window.dispatchEvent(new Event(EVENTO_ADICIONADO));
 }
 
 export function alterarQtd(alvo: Pick<ItemSacola, "produtoId" | "cor" | "tamanho">, qtd: number) {
